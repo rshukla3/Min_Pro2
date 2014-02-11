@@ -1,0 +1,1 @@
+GitHub reporsitory for mini project-2. Connecting Virtex-5 FPGA to minotr using DVI cable.
