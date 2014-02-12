@@ -108,6 +108,7 @@ module draw_logic(clk, rst, pixel_x, pixel_y, pixel_r, pixel_g, pixel_b,multipli
 	 assign rom_addr = {next_pixy,cur_digit,next_pixx};
 	 
     simple_rom #(12,24,"numbers.mem") num_rom(clk, rom_addr, rom_color);
+	 //simple_rom_1 num_rom(clk, rom_addr, rom_color);
 
     always@(*) begin
 	   pixel_r = 8'h00;

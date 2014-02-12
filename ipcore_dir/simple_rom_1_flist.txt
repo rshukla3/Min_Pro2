@@ -1,0 +1,16 @@
+# Output products list for <simple_rom_1>
+_xmsgs\pn_parser.xmsgs
+blk_mem_gen_ds512.pdf
+blk_mem_gen_readme.txt
+simple_rom_1.asy
+simple_rom_1.gise
+simple_rom_1.mif
+simple_rom_1.ngc
+simple_rom_1.v
+simple_rom_1.veo
+simple_rom_1.vhd
+simple_rom_1.vho
+simple_rom_1.xco
+simple_rom_1.xise
+simple_rom_1_flist.txt
+simple_rom_1_xmdf.tcl
