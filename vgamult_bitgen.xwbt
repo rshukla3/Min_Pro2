@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=C:\Users\Rohit\Documents\GitHub\Min_Pro2\vgamult.ncd
+OUTFILE=C:\Users\Rohit\Documents\GitHub\Min_Pro2\vgamult.bit
+FAMILY=Virtex5
+PART=xc5vlx110t-3ff1136
+WORKINGDIR=C:\Users\Rohit\Documents\GitHub\Min_Pro2
+LICENSE=ISE
+USER_INFO=0_0_622

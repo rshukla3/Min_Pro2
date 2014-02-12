@@ -1,0 +1,40 @@
+Release 12.2 ngdbuild M.63c (nt64)
+Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
+
+Command Line: C:\Xilinx\12.2\ISE_DS\ISE\bin\nt64\unwrapped\ngdbuild.exe
+-intstyle ise -dd _ngo -sd ipcore_dir -nt timestamp -uc ece554_v5/vgamult.ucf -p
+xc5vlx110t-ff1136-3 vgamult.ngc vgamult.ngd
+
+Reading NGO file "C:/Users/Rohit/Documents/GitHub/Min_Pro2/vgamult.ngc" ...
+Loading design module "ipcore_dir/mult32.ngc"...
+Applying constraints in "ipcore_dir/mult32.ncf" to module
+"ipcore_dir/mult32.ngc"...
+Checking Constraint Associations...
+Gathering constraint information from source properties...
+Done.
+
+Annotating constraints to design from ucf file "ece554_v5/vgamult.ucf" ...
+Resolving constraint associations...
+Checking Constraint Associations...
+Done...
+
+Checking expanded design ...
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+NGDBUILD Design Results Summary:
+  Number of errors:     0
+  Number of warnings:   0
+
+Total memory usage is 161244 kilobytes
+
+Writing NGD file "vgamult.ngd" ...
+Total REAL time to NGDBUILD completion:  11 sec
+Total CPU time to NGDBUILD completion:   10 sec
+
+Writing NGDBUILD log file "vgamult.bld"...
