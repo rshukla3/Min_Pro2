@@ -18,7 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module vgamult(clk_100mhz,  rst, pixel_r, pixel_g, pixel_b, up, down, left, right, hsync, vsync, blank, clk, clk_n, D, dvi_rst, scl_tri, sda_tri);
+module vgamult(clk_100mhz,  rst, pixel_r, pixel_g, pixel_b, hsync, vsync, blank, clk, clk_n, D, dvi_rst, scl_tri, sda_tri);
     input clk_100mhz;
     input rst;
 	 
@@ -37,11 +37,6 @@ module vgamult(clk_100mhz,  rst, pixel_r, pixel_g, pixel_b, up, down, left, righ
 	 output clk_n;
 	 
 	 inout scl_tri, sda_tri;
-	 
-    input up;
-    input down;
-	 input left;
-	 input right;
 	 
 	 wire [9:0] pixel_x;
 	 wire [9:0] pixel_y;
@@ -67,6 +62,9 @@ module vgamult(clk_100mhz,  rst, pixel_r, pixel_g, pixel_b, up, down, left, righ
 	 wire sda;
 	 wire scl;
 	 
+	 // VGA logic indicates when to read the data (24-bit pixel values) from xfifo.
+	 wire rd_fifo;
+	 
 	 //DVI Interface
 	 assign dvi_rst = ~(rst|~locked_dcm);
 	 assign D = (clk)? pixel_gbrg[23:12] : pixel_gbrg[11:0];
@@ -85,7 +83,10 @@ module vgamult(clk_100mhz,  rst, pixel_r, pixel_g, pixel_b, up, down, left, righ
 
 	// diff_clk clk_diff1(clkn_100mhz,  rst, clkn_25mhz, clknin_ibufg_out, clkn_100mhz_buf, lockedn_dcm);
 	 vga_clk vga_clk_gen1(clk_100mhz, rst, clk_25mhz, clkin_ibufg_out, clk_100mhz_buf, locked_dcm);
-    vga_logic  vgal1(clk_25mhz, rst|~locked_dcm, blank, comp_sync, hsync, vsync, pixel_x, pixel_y);
-	 main_logic main1(clk_25mhz, rst|~locked_dcm, pixel_x, pixel_y, pixel_r, pixel_g, pixel_b);
+    vga_logic  vgal1(clk_25mhz, rst|~locked_dcm, blank, comp_sync, hsync, vsync, pixel_x, pixel_y, rd_fifo);
+	 
+	 // Note that instead of using clk_100mhz as input, I am using clk_100mhz_buf as input. This is the output 
+	 // received from clk divider.
+	 main_logic main1(clk_25mhz, clk_100mhz_buf, rst|~locked_dcm, pixel_r, pixel_g, pixel_b, rd_fifo);
 	 
 endmodule

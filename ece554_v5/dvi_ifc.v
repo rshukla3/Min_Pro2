@@ -95,9 +95,14 @@ reg                          IIC_xfer_done;
 
 
 // Generate I2C clock and data 
-always @ (posedge Clk) 
+always @ (posedge Clk, negedge Reset_n) 
 begin : I2C_CLK_DATA
-    if (~Reset_n || c_state == IDLE )
+     if (~Reset_n)
+      begin
+        SDA_out <= 1'b1;
+        SCL_out <= 1'b1;
+      end
+    else if(c_state == IDLE )
       begin
         SDA_out <= 1'b1;
         SCL_out <= 1'b1;
@@ -131,7 +136,7 @@ assign SCL = SCL_out;
                         
 
 // Fill the SDA buffer 
-always @ (posedge Clk) 
+always @ (posedge Clk, negedge Reset_n) 
 begin : SDA_BUF
     //reset or end condition
     if(~Reset_n) 
@@ -176,7 +181,7 @@ end
 
 
 // Generate write_count signal
-always @ (posedge Clk)
+always @ (posedge Clk, negedge Reset_n)
 begin : GEN_WRITE_CNT
  if(~Reset_n)
    write_count<=3'd0;
@@ -185,7 +190,7 @@ begin : GEN_WRITE_CNT
 end    
 
 // Transaction done signal                        
-always @ (posedge Clk) 
+always @ (posedge Clk, negedge Reset_n) 
 begin : TRANS_DONE
     if(~Reset_n)
       Done <= 1'b0;
@@ -195,16 +200,18 @@ end
  
        
 // Generate bit_count signal
-always @ (posedge Clk) 
+always @ (posedge Clk, negedge Reset_n) 
 begin : BIT_CNT
-    if(~Reset_n || (c_state == WAIT_IIC)) 
+	if(~Reset_n ) 
+       bit_count <= 0;
+    else if(c_state == WAIT_IIC) 
        bit_count <= 0;
     else if ( c_state == CLK_RISE && cycle_count == TRANSITION_CYCLE)
        bit_count <= bit_count+1;
 end    
 
 // Next state block
-always @ (posedge Clk) 
+always @ (posedge Clk, negedge Reset_n) 
 begin : NEXT_STATE
     if(~Reset_n)
        c_state <= INIT;

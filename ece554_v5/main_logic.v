@@ -18,17 +18,52 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module main_logic(clk, rst, pixel_x, pixel_y, pixel_r, pixel_g, pixel_b);
-    input clk;
+module main_logic(clk_25mhz, clk_100mhz, rst, pixel_r, pixel_g, pixel_b, rd_fifo);
+    input clk_25mhz;
+	 input clk_100mhz;
     input rst;
-    input [9:0] pixel_x;
-    input [9:0] pixel_y;
+	 input rd_fifo;
     output [7:0] pixel_r;
     output [7:0] pixel_g;
     output [7:0] pixel_b;
 	 
-	 wire();
-	 xfifo
+	 wire [23:0] fifo_data;	 
+	 wire [23:0] rom_data;
+	 wire fifo_empty;
+	 wire wr_en_fifo;
+	 wire rd_en_fifo;
+	 wire full_fifo;
 	 
+	 wire receive_data_ROM;
+	 	 
+	 display_plane dp(
+		.clk(clk_100mhz),
+		.rst(rst),
+		.rom_data(rom_data),
+		.send_data(receive_data_ROM),
+		.full_fifo(full_fifo)
+		);
+	
+	 assign wr_en_fifo = (~full_fifo)&(~rst);
+	 assign rd_en_fifo = rd_fifo&(~fifo_empty)&(~rst);
+	 
+	 xfifo_1 xclk_fifo(
+		.rst(rst),
+		.wr_clk(clk_100mhz),
+		.rd_clk(clk_25mhz),
+		.din(rom_data),
+		.wr_en(wr_en_fifo),
+		.rd_en(rd_en_fifo),
+		.dout(fifo_data),
+		.full(full_fifo),
+		.empty(fifo_empty)
+	 );
+	 
+	 RD_FIFO read_fifo(
+		.fifo_data_rd(fifo_data),
+		.pixel_r (pixel_r),
+		.pixel_g (pixel_g),
+		.pixel_b (pixel_b)
+	 );
 
 endmodule
