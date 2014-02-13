@@ -53,12 +53,18 @@ module vga_logic(clk, rst, blank, comp_sync, hsync, vsync, pixel_x, pixel_y, rd_
 				pixel_x <= next_pixel_x;
 				pixel_y <= next_pixel_y;
 			end
+			else
+			begin
+				pixel_x <= pixel_x;
+				pixel_y <= pixel_y;
+			end
 		end
 		
 		assign hsync = (pixel_x < 10'd656) || (pixel_x > 10'd751); // 96 cycle pulse
 		assign vsync = (pixel_y < 10'd490) || (pixel_y > 10'd491); // 2 cycle pulse
 		assign blank = ~((pixel_x > 10'd639) | (pixel_y > 10'd479));
-		assign rd_fifo = blank;
+	//	assign rd_fifo = blank;
+		assign rd_fifo = ~((next_pixel_x > 10'd639) | (next_pixel_y > 10'd479));
 	//	assign rd_fifo = ~(((pixel_x < 10'd799) & (pixel_x > 10'd638)) | ((pixel_y < 10'd520) & (pixel_y > 10'd478)));
 		assign comp_sync = 1'b0; // don't know, dont use
 	 
