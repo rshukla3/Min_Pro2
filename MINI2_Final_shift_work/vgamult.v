@@ -84,10 +84,10 @@ module vgamult(clk_100mhz,  rst, pixel_r, pixel_g, pixel_b, hsync, vsync, blank,
 
 	// diff_clk clk_diff1(clkn_100mhz,  rst, clkn_25mhz, clknin_ibufg_out, clkn_100mhz_buf, lockedn_dcm);
 	 vga_clk vga_clk_gen1(clk_100mhz, rst, clk_25mhz, clkin_ibufg_out, clk_100mhz_buf, locked_dcm);
-    vga_logic  vgal1(clk_25mhz, rst|~locked_dcm, blank, comp_sync, hsync, vsync, pixel_x, pixel_y, rd_fifo, fifo_empty);
+    vga_logic  vgal1(clk_25mhz, rst|~locked_dcm, blank, comp_sync, hsync, vsync, pixel_x, pixel_y, rd_fifo, fifo_empty, done);
 	 
 	 // Note that instead of using clk_100mhz as input, I am using clk_100mhz_buf as input. This is the output 
 	 // received from clk divider.
-	 main_logic main1(clk_25mhz, clk_100mhz_buf, rst|~locked_dcm, pixel_r, pixel_g, pixel_b, rd_fifo, fifo_empty);
+	 main_logic main1(clk_25mhz, clk_100mhz_buf, rst|~locked_dcm, pixel_r, pixel_g, pixel_b, rd_fifo, fifo_empty, done);
 	 
 endmodule

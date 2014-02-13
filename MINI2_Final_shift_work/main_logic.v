@@ -18,11 +18,12 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module main_logic(clk_25mhz, clk_100mhz, rst, pixel_r, pixel_g, pixel_b, rd_fifo, fifo_empty);
+module main_logic(clk_25mhz, clk_100mhz, rst, pixel_r, pixel_g, pixel_b, rd_fifo, fifo_empty, done);
     input clk_25mhz;
 	 input clk_100mhz;
     input rst;
 	 input rd_fifo;
+	 input done;
     output [7:0] pixel_r;
     output [7:0] pixel_g;
     output [7:0] pixel_b;
@@ -36,17 +37,20 @@ module main_logic(clk_25mhz, clk_100mhz, rst, pixel_r, pixel_g, pixel_b, rd_fifo
 	 wire full_fifo;
 	 
 	 wire WEN;
+	 
 	
 top_display_rom rom_disp_inst(
     .clk(clk_100mhz), 
 	 .rst(rst), 
 	 .fifo_full(full_fifo),
     .data(rom_data),
-    .WEN(WEN)
+    .WEN(WEN),
+	 .done(done)
 );	
 		
 //	 assign wr_en_fifo = (~full_fifo)&(~rst);
-	 assign rd_en_fifo = rd_fifo&(~fifo_empty)&(~rst);
+	 //assign rd_en_fifo = rd_fifo&(~fifo_empty)&(~rst);
+	 assign rd_en_fifo = rd_fifo;
 	 
 	 xfifo_1 xclk_fifo(
 		.rst(rst),

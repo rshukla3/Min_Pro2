@@ -23,6 +23,7 @@ module display(
     input rst,
 	input fifo_full,
     input [23:0] data_in,
+	 input done,
     output reg [12:0] addr,
     output reg WEN,
     output [24:0] data_out
@@ -60,7 +61,7 @@ module display(
 		baseaddr <= 13'd0;
 		addr <= 13'd0;
 		end
-	else if(!fifo_full) // check if active high or low // fifo is not full then do read and write
+	else if((!fifo_full)) // check if active high or low // fifo is not full then do read and write
 		begin
 		
 		if(hp_flag_80) 

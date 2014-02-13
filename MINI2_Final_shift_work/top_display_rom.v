@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module top_display_rom (
-input clk, rst, fifo_full,
+input clk, rst, fifo_full, done,
 output [23:0] data,
 output WEN
 );
@@ -21,7 +21,8 @@ display display_inst (
     .data_in(data_in),
     .addr(addr),
     .WEN(WEN),
-    .data_out(data)
+    .data_out(data),
+	 .done(done)
     );	
 
 endmodule
