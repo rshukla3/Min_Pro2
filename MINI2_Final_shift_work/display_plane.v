@@ -31,13 +31,13 @@ module display(
 	
 	
 	reg [2:0] h_count_8;
-	assign h_flag_8 = (h_count_8 == 3) ? 1'b1 : 1'b0;
+	assign h_flag_8 = (h_count_8 == 7) ? 1'b1 : 1'b0;
 	
 	reg [6:0] hp_count_80;
 	assign hp_flag_80 = (hp_count_80 == 79) ? 1'b1 : 1'b0;
 
 	reg [2:0] v_count_8;
-	assign v_flag_8 = (v_count_8 == 3) ? 1'b1 : 1'b0;
+	assign v_flag_8 = (v_count_8 == 7) ? 1'b1 : 1'b0;
 
 	reg [5:0] vp_count_60;
 	assign vp_flag_60 = (vp_count_60 == 59) ? 1'b1 : 1'b0;	

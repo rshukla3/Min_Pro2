@@ -80,7 +80,7 @@ module tb_fifo;
 	end
 	
 	always
-	 #25 clk_100mhz = !clk_100mhz;
+	 #5 clk_100mhz = !clk_100mhz;
       
 endmodule
 
