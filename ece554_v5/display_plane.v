@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:46:18 02/12/2014 
+// Create Date:    
 // Design Name: 
-// Module Name:    display_plane 
+// Module Name:    driver 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,53 +18,108 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module display_plane(
-	clk,
-	rst,
-	rom_data,
-	send_data,
-	full_fifo
+module display(
+    input clk,
+    input rst,
+	input fifo_full,
+    input [23:0] data_in,
+	 input done,
+    output reg [12:0] addr,
+    output reg I_WEN,
+    output [24:0] data_out
     );
 
-	input clk;
-	input rst;
-	input full_fifo;
-	output [23:0] rom_data;
-	output reg send_data;
-	//reg [23:0] rom_data;
 	
-	reg[12:0]counter;
 	
-	always @(posedge clk)
+	reg [2:0] h_count_8;
+	assign h_flag_8 = (h_count_8 == 7) ? 1'b1 : 1'b0;
+	
+	reg [6:0] hp_count_80;
+	assign hp_flag_80 = (hp_count_80 == 79) ? 1'b1 : 1'b0;
+
+	reg [2:0] v_count_8;
+	assign v_flag_8 = (v_count_8 == 7) ? 1'b1 : 1'b0;
+
+	reg [5:0] vp_count_60;
+	assign vp_flag_60 = (vp_count_60 == 59) ? 1'b1 : 1'b0;	
+	
+	reg [12:0] baseaddr;
+	
+	//reg I_WEN;
+	
+	assign data_out = data_in;
+	
+	always @ (posedge clk)
 	begin
-		if(rst)
+	
+	if(rst)
 		begin
-			counter <= 13'd0;
-			send_data <= 1'b0;
+		h_count_8 <= 3'd0;
+		hp_count_80 <= 7'd0;
+		v_count_8 <= 3'd0;
+		vp_count_60 <= 6'd0;
+		baseaddr <= 13'd0;
+		addr <= 13'd0;
 		end
-		else
+	else if((!fifo_full)) // check if active high or low // fifo is not full then do read and write
 		begin
-			case(full_fifo)
-			1'b0: if(counter == 13'd4800)
-					begin
-						counter <= 13'd0;
-						send_data <= 1'b0;
-					end
-					else
-					begin
-						counter <= counter + 1'd1;
-						send_data <= 1'b1;						
-					end
-			default: counter <= counter;
-			endcase
+		
+		if(hp_flag_80) 
+			begin
+			hp_count_80 <= 0;
+			h_count_8 <= h_count_8 + 1;			
+			addr <= baseaddr;
+			end
+		if(h_flag_8 & hp_flag_80)
+			begin
+            h_count_8 <= 0;
+            vp_count_60 <= vp_count_60 + 1;
+            baseaddr <= baseaddr + 80;
+            addr <=	baseaddr+80;		
+			end
+			
+		if(vp_flag_60 & h_flag_8 & hp_flag_80)
+			begin
+			vp_count_60 <= 0;
+		    v_count_8 <= v_count_8 + 1;
+			baseaddr <= 0;
+			addr <= 0;
+			end
+			
+		if(v_flag_8 & vp_flag_60 & h_flag_8 & hp_flag_80)
+			begin
+			v_count_8 <= 0;
+			end
+		
+		
+		if(!hp_flag_80) 
+		begin
+		addr <= addr + 1;
+		hp_count_80 <= hp_count_80 + 1;
 		end
+		
+		end
+	
 	end
 	
-	
-	ROM_img rom_img(
-		.clka(clk),
-		.addra(counter),
-		.douta(rom_data)
-		);
 
+always @(posedge clk)
+	begin
+	if(rst)
+	I_WEN <=0;
+	else if(fifo_full)
+    I_WEN <= 0;
+	else 
+	I_WEN <= 1;
+	end
+	
+
+//always @(posedge clk)
+//	begin
+//	if(rst)
+//	WEN <= 0;
+//	else
+//	WEN <= I_WEN;
+//	end
+	
 endmodule

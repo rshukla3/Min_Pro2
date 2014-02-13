@@ -38,7 +38,7 @@ module main_logic(clk_25mhz, clk_100mhz, rst, pixel_r, pixel_g, pixel_b, rd_fifo
 	 
 	 wire WEN;
 	 
-	
+	assign wr_en_fifo = (~full_fifo)&(~rst);
 top_display_rom rom_disp_inst(
     .clk(clk_100mhz), 
 	 .rst(rst), 
@@ -57,7 +57,7 @@ top_display_rom rom_disp_inst(
 		.wr_clk(clk_100mhz),
 		.rd_clk(clk_25mhz),
 		.din(rom_data),
-		.wr_en(WEN),
+		.wr_en(wr_en_fifo),
 		.rd_en(rd_en_fifo),
 		.dout(fifo_data),
 		.full(full_fifo),

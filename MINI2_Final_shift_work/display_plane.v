@@ -25,7 +25,7 @@ module display(
     input [23:0] data_in,
 	 input done,
     output reg [12:0] addr,
-    output reg WEN,
+    output reg I_WEN,
     output [24:0] data_out
     );
 
@@ -45,7 +45,7 @@ module display(
 	
 	reg [12:0] baseaddr;
 	
-	reg I_WEN;
+	//reg I_WEN;
 	
 	assign data_out = data_in;
 	
@@ -113,12 +113,13 @@ always @(posedge clk)
 	I_WEN <= 1;
 	end
 	
-always @(posedge clk)
-	begin
-	if(rst)
-	WEN <= 0;
-	else
-	WEN <= I_WEN;
-	end
+
+//always @(posedge clk)
+//	begin
+//	if(rst)
+//	WEN <= 0;
+//	else
+//	WEN <= I_WEN;
+//	end
 	
 endmodule
