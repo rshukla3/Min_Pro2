@@ -69,18 +69,18 @@ module tb_fifo;
 	initial begin
 		// Initialize Inputs
 		clk_100mhz = 0;
-		rst = 0;
+		rst = 1;
 
 		// Wait 100 ns for global reset to finish
 		#100;
       rst = 1;  
 		// Add stimulus here
-		#10
+		#30
 		rst = 0;
 	end
 	
 	always
-	 #100 clk_100mhz = ~clk_100mhz;
+	 #25 clk_100mhz = !clk_100mhz;
       
 endmodule
 
