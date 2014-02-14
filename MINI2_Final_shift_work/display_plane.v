@@ -30,22 +30,25 @@ module display(
     );
 
 	
-	
+	// Flag for counting 80 pixels, 8 times horizontally
 	reg [2:0] h_count_8;
 	assign h_flag_8 = (h_count_8 == 7) ? 1'b1 : 1'b0;
 	
+	// Flag for counting till 80 pixels for each row
 	reg [6:0] hp_count_80;
 	assign hp_flag_80 = (hp_count_80 == 79) ? 1'b1 : 1'b0;
 
+	// Flag for counting 60 pixels, 8 times vertically
 	reg [2:0] v_count_8;
 	assign v_flag_8 = (v_count_8 == 7) ? 1'b1 : 1'b0;
 
+	// Flag for counting 60 pixels vertically
 	reg [5:0] vp_count_60;
 	assign vp_flag_60 = (vp_count_60 == 59) ? 1'b1 : 1'b0;	
 	
+	// Base address for reading from ROM
 	reg [12:0] baseaddr;
-	
-	//reg I_WEN;
+
 	
 	assign data_out = data_in;
 	
@@ -74,6 +77,7 @@ module display(
 			begin
             h_count_8 <= 0;
             vp_count_60 <= vp_count_60 + 1;
+			// Shifting the base address to read next row
             baseaddr <= baseaddr + 80;
             addr <=	baseaddr+80;		
 			end
@@ -82,6 +86,7 @@ module display(
 			begin
 			vp_count_60 <= 0;
 		    v_count_8 <= v_count_8 + 1;
+			// Reseting the baseaddr to 0 since we are done reading image once
 			baseaddr <= 0;
 			addr <= 0;
 			end
@@ -92,6 +97,7 @@ module display(
 			end
 		
 		
+		// Increment Address and counter corresponding to 80 pixels
 		if(!hp_flag_80) 
 		begin
 		addr <= addr + 1;
@@ -113,13 +119,5 @@ always @(posedge clk)
 	I_WEN <= 1;
 	end
 	
-
-//always @(posedge clk)
-//	begin
-//	if(rst)
-//	WEN <= 0;
-//	else
-//	WEN <= I_WEN;
-//	end
 	
 endmodule
