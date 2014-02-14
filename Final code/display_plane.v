@@ -97,7 +97,7 @@ module display(
 			end
 		
 		
-		// Increment Flag and counter corresponding to 80 pixels
+		// Increment Address and counter corresponding to 80 pixels
 		if(!hp_flag_80) 
 		begin
 		addr <= addr + 1;
