@@ -65,8 +65,6 @@ module vga_logic(clk, rst, blank, comp_sync, hsync, vsync, pixel_x, pixel_y, rd_
 		assign vsync = (pixel_y < 10'd490) || (pixel_y > 10'd491); // 2 cycle pulse
 		assign blank = ~((pixel_x > 10'd639) | (pixel_y > 10'd479));
 	//	assign rd_fifo = blank;
-	   // Read FIFO is enabled one clock cycle after blank is set. The simple way to do this is
-		// using next_pixel_x and next_pixel_y values. Also, do not read from FIFO when it is empty.
 		assign rd_fifo = ((next_pixel_x < 10'd640) && (next_pixel_y < 10'd480) && ~fifo_empty && done);
 	//	assign rd_fifo = ~(((pixel_x < 10'd799) & (pixel_x > 10'd638)) | ((pixel_y < 10'd520) & (pixel_y > 10'd478)));
 		assign comp_sync = 1'b0; // don't know, dont use

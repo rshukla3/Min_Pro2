@@ -32,26 +32,24 @@ module main_logic(clk_25mhz, clk_100mhz, rst, pixel_r, pixel_g, pixel_b, rd_fifo
 	 wire [23:0] fifo_data;	 
 	 wire [23:0] rom_data;
 	 wire fifo_empty;
-	 wire wr_en_fifo;
+	// wire wr_en_fifo;
 	 wire rd_en_fifo;
 	 wire full_fifo;
 	 
 	 wire WEN;
 	 
-	// Write the data into FIFO only when FIFO is not full and reset is not set. 
 	assign wr_en_fifo = (~full_fifo)&(~rst);
-	top_display_rom rom_disp_inst(
-		.clk(clk_100mhz), 
-		.rst(rst), 
-		.fifo_full(full_fifo),
-		.data(rom_data),
-		.WEN(WEN),
-		.done(done)
-	);	
-
-	// We get this read FIFO signal from VGA_logic module
-	// and attach it to XFIFO to read the values of FIFO
-	// data at 25MHz.
+top_display_rom rom_disp_inst(
+    .clk(clk_100mhz), 
+	 .rst(rst), 
+	 .fifo_full(full_fifo),
+    .data(rom_data),
+    .WEN(WEN),
+	 .done(done)
+);	
+		
+//	 assign wr_en_fifo = (~full_fifo)&(~rst);
+	 //assign rd_en_fifo = rd_fifo&(~fifo_empty)&(~rst);
 	 assign rd_en_fifo = rd_fifo;
 	 
 	 xfifo_1 xclk_fifo(
@@ -66,8 +64,7 @@ module main_logic(clk_25mhz, clk_100mhz, rst, pixel_r, pixel_g, pixel_b, rd_fifo
 		.empty(fifo_empty)
 	 );
 	 
-	 // The 24-bit data that is read from FIFO is slipt up into 
-	 // 3 8-bit values in this module.
+	 
 	 
 	 RD_FIFO read_fifo(
 		.fifo_data_rd(fifo_data),
